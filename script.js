@@ -1,4 +1,4 @@
-var url = 'http://127.0.0.1:8000/image-decodeText'
+var url = 'http://127.0.0.1:8000/decode'
 var url2 = 'https://jsonplaceholder.typicode.com/posts'
 const myHeaders = new Headers();
 myHeaders.append('Access-Control-Allow-Headers', "*")

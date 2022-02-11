@@ -3,9 +3,15 @@ from rest_framework import status
 from rest_framework.decorators import api_view, parser_classes
 from rest_framework.response import Response
 from rest_framework.parsers import FormParser, MultiPartParser
+import io
+import cv2
+from imageio import imread
+import numpy as np
+from .models import Image_LSB,Audio_LSB
+import wave
+import bitarray
 
-from .models import Image_LSB
-
+import base64
 
 from django.core.cache import cache
 
@@ -19,6 +25,7 @@ def overview(request):
         'Create From List': 'products/create_list/',
         'Update': 'products/update/<str:pk>/',
         'Delete': 'products/delete/<str:pk>/',
+        'decode':'image-decodeText/'
     }
     return Response(api_urls)
 
@@ -129,15 +136,48 @@ def ImageEncode(request):
 
 
 @api_view(['POST'])
-def Imagedecode(request):
+def ImagedecodeTwoLeast(request):
     image = Image_LSB()
     image.decode_text('afterlsb.png')
-    return Response('text uploaded successfully')
+    return Response(response)
 
 @api_view(['GET'])
-def ImagedecodeText(request):
+def ImagedecodeLeast(request):
     response = {}
     image = Image_LSB()
-    x= image.decode_textLeast('afterlsb.png')
+    image_name = "afterlsb.png"
+    x= image.decode_textLeast(image_name)
     response['data'] = x
     return Response(response)
+
+
+@api_view(['GET'])
+def AudioLeast(request):
+    response = {}
+    music = Audio_LSB()
+    audio_name = 'sampleStego.wav'
+    audio = wave.open(audio_name, mode='rb')
+    frame_bytes = bytearray(list(audio.readframes(audio.getnframes())))
+    x=music.decode(audio,frame_bytes)
+    response['data'] = x
+    return Response(response)
+
+@api_view(['GET'])
+def AudioTwoLeast(request):
+    response = {}
+    music = Audio_LSB()
+    audio_name = 'sampleStego.wav'
+    audio = wave.open(audio_name, mode='rb')
+    frame_bytes = bytearray(list(audio.readframes(audio.getnframes())))
+    x=music.twoDecode(audio,frame_bytes)
+    response['data'] = x
+    return Response(response)
+
+@api_view(['GET'])
+def AudioEncode(request ):
+    music = Audio_LSB()
+    audio_name = 'sample.wav'
+    audio = wave.open(audio_name, mode='rb')
+    frame_bytes = bytearray(list(audio.readframes(audio.getnframes())))
+    music.encode(audio_name,'test 1 for lsb audio',frame_bytes)
+    return Response()
