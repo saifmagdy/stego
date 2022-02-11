@@ -136,50 +136,25 @@ class Image_LSB():
         encoded_image = self.hideData(image, data) # call the hideData function to hide the secret message into the selected image
         cv2.imwrite(filename, encoded_image)
 
-    def decode_text(self):
-        image_name = input("Enter the name of the steganographed image that you want to decode (with extension) :")
-    # read the image that contains the hidden image
-    
+    def decode_text(self,image_name):
         image = cv2.imread(image_name)#read the image using cv2.imread
         resized_image = cv2.resize(image, (500, 500))
-        #cv2.imshow("steg.jpg" ,resized_image)#display the image
-        #cv2.waitKey()
-
-        print("The Steganographed image is as shown below: ")
-    #resize the original image as per your requirement
-
-
         text = self.showData(image)
         return text
 
-    def decode_textLeast(self):
-        image_name = input("Enter the name of the steganographed image that you want to decode (with extension) :")
-    # read the image that contains the hidden image
-    
+    def decode_textLeast(self,image_name):
         image = cv2.imread(image_name)#read the image using cv2.imread
         #resized_image = cv2.resize(image, (500, 500))
         #cv2.imshow("steg.jpg" ,resized_image)#display the image
         #cv2.waitKey()
 
         print("The Steganographed image is as shown below: ")
-    #resize the original image as per your requirement
+        #resize the original image as per your requirement
 
 
         text = self.showDataLeast(image)
         return text
 
-    def Steganography(self):
-        a = input("Image Steganography \n 1. Encode the data \n 2. Decode the data with least 2 significant bits \n 3. decode with least significant bit \n bit Your input is: ")
-        userinput = int(a)
-        if (userinput == 1):
-            print("\nEncoding....")
-            self.encode_text()     
-        elif (userinput == 2):
-            print("\nDecoding....") 
-            print("Decoded message is " + self.decode_text()) 
-        elif (userinput == 3):
-            print("\nDecoding....") 
-            print("Decoded message is " + self.decode_textLeast()) 
             
 
    

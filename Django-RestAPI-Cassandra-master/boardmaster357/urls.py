@@ -20,5 +20,7 @@ urlpatterns = [
 
 
     path('image-encode/', views.ImageEncode, name="image-encode"),
+    path('image-decode/', views.Imagedecode, name="image-decode"),
+    path('image-decodeText/', views.ImagedecodeText, name="image-decodeText"),
 
 ]

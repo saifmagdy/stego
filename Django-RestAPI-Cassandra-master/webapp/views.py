@@ -125,6 +125,19 @@ def attributes_delete(request, key):
 def ImageEncode(request):
     image = Image_LSB()
     image.encode_text('test1.jpg','lsb test','afterlsb.png')
-    #sadiiii
-    #sadiiii22
     return Response('file Succsesfully encoded')
+
+
+@api_view(['POST'])
+def Imagedecode(request):
+    image = Image_LSB()
+    image.decode_text('afterlsb.png')
+    return Response('text uploaded successfully')
+
+@api_view(['GET'])
+def ImagedecodeText(request):
+    response = {}
+    image = Image_LSB()
+    x= image.decode_textLeast('afterlsb.png')
+    response['data'] = x
+    return Response(response)
