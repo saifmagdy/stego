@@ -138,8 +138,15 @@ class Image_LSB():
 
 class Audio_LSB():
    
-   def __init__(self):
-      pass
+   
+   
+   def __init__(self,audio_name):
+
+        print(audio_name)
+        self.audio_name = audio_name
+        self.audio = wave.open(audio_name,mode="rb")
+        self.frame_bytes = bytearray(list(self.audio.readframes(self.audio.getnframes())))
+
    
    def isValid(self, string, framebytes):
       bits = bitarray.bitarray()
@@ -151,33 +158,25 @@ class Audio_LSB():
    
 
    def encode(self, string):
-      print("\nEncoding Starts..")
-      ##string = "DR.HALA is goodd"
-      ##print(string)
       string = string + '#####'
       ba= bitarray.bitarray()
       ba.frombytes(string.encode('utf-8'))
       bits = ba.tolist()
-      ##print(len(string.encode('utf-8')))
-      ##print(len(frame_bytes))
+
       for i, bit in enumerate(bits):
-         frame_bytes[i] = (frame_bytes[i] & 254) | bit
-      frame_modified = bytes(frame_bytes)
+         self.frame_bytes[i] = (self.frame_bytes[i] & 254) | bit
+      frame_modified = bytes(self.frame_bytes)
     
-      newAudio =  wave.open('sampleStego.wav', 'wb')
-      newAudio.setparams(audio.getparams())
+      newAudio =  wave.open('samplelsb.wav', 'wb')
+      newAudio.setparams(self.audio.getparams())
       newAudio.writeframes(frame_modified)
+    
 
       newAudio.close()
-      audio.close()
-      print(" |---->succesfully encoded inside sampleStego.wav")
+      self.audio.close()
+      
       
    def twoEncode(self, string):
-      print("\nEncoding Starts..")
-      audio = wave.open("sample.wav",mode="rb")
-      frame_bytes = bytearray(list(audio.readframes(audio.getnframes())))
-      #string = "DR. Hala is good"
-      #print(string)
       string = string + '#####'
     
       ba= bitarray.bitarray()
@@ -188,43 +187,40 @@ class Audio_LSB():
       j=0
       for i in range(0,(len(bits)//2)):
          tmp = str(int(bits[j])) + str(int(bits[j+1]))
-         frame_bytes[i] = (frame_bytes[i] & 252) | int(tmp,2)
+         self.frame_bytes[i] = (self.frame_bytes[i] & 252) | int(tmp,2)
          j+=2
-      frame_modified = bytes(frame_bytes)
+      frame_modified = bytes(self.frame_bytes)
     
-      newAudio =  wave.open('sampleStegoo.wav', 'wb')
-      newAudio.setparams(audio.getparams())
+      newAudio =  wave.open('twolsb.wav', 'wb')
+      newAudio.setparams(self.audio.getparams())
       newAudio.writeframes(frame_modified)
 
       newAudio.close()
-      audio.close()
-      print(" |---->succesfully encoded inside sampleStego.wav")
+      self.audio.close()
       
       
    def decode(self):
-      print("\nDecoding Starts..")
-      audio = wave.open("sampleStego.wav", mode='rb')
-      frame_bytes = bytearray(list(audio.readframes(audio.getnframes())))
-      extracted = [frame_bytes[i] & 1 for i in range(len(frame_bytes))]
+      audio = wave.open(self.audio_name, mode='rb')
+      self.frame_bytes = bytearray(list(audio.readframes(audio.getnframes())))
+      extracted = [self.frame_bytes[i] & 1 for i in range(len(self.frame_bytes))]
     
       string = bitarray.bitarray(extracted).tobytes().decode('utf-8','ignore')
-    
+      self.audio.close()	
       decoded = string.split("#####")[0]
-      print("Sucessfully decoded: "+decoded)
-      audio.close()	
+      return decoded
    
    
    def twoDecode(self):
-      print("\nDecoding Starts..")
-      audio = wave.open("sampleStegoo.wav", mode='rb')
+      audio = wave.open("twolsb.wav", mode='rb')
       frame_bytes = bytearray(list(audio.readframes(audio.getnframes())))
       extracted = ['{:02b}'.format(frame_bytes[i] & 3) for i in range(len(frame_bytes))]
       extracted = ''.join(extracted)
       string = bitarray.bitarray(extracted).tobytes().decode('utf-8','ignore')
-    
-      decoded = string.split("#####")[0]
-      print("Sucessfully decoded: "+decoded)
       audio.close()
+      decoded = string.split("#####")[0]
+      return decoded
+      
+      
 
 
        

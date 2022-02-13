@@ -135,10 +135,12 @@ def ImageEncode(request):
     return Response('file Succsesfully encoded')
 
 
-@api_view(['POST'])
+@api_view(['GET'])
 def ImagedecodeTwoLeast(request):
+    response = {}
     image = Image_LSB()
-    image.decode_text('afterlsb.png')
+    x= image.decode_text('afterlsb.png')
+    response['data'] = x
     return Response(response)
 
 @api_view(['GET'])
@@ -154,30 +156,31 @@ def ImagedecodeLeast(request):
 @api_view(['GET'])
 def AudioLeast(request):
     response = {}
-    music = Audio_LSB()
-    audio_name = 'sampleStego.wav'
-    audio = wave.open(audio_name, mode='rb')
-    frame_bytes = bytearray(list(audio.readframes(audio.getnframes())))
-    x=music.decode(audio,frame_bytes)
+    audio_name = 'samplelsb.wav'
+    music = Audio_LSB(audio_name)
+    x=music.decode()
     response['data'] = x
     return Response(response)
 
 @api_view(['GET'])
 def AudioTwoLeast(request):
+    audio_name = 'twolsb.wav'
     response = {}
-    music = Audio_LSB()
-    audio_name = 'sampleStego.wav'
-    audio = wave.open(audio_name, mode='rb')
-    frame_bytes = bytearray(list(audio.readframes(audio.getnframes())))
-    x=music.twoDecode(audio,frame_bytes)
+    music = Audio_LSB(audio_name)
+    x=music.twoDecode()
     response['data'] = x
     return Response(response)
 
 @api_view(['GET'])
 def AudioEncode(request ):
-    music = Audio_LSB()
-    audio_name = 'sample.wav'
-    audio = wave.open(audio_name, mode='rb')
-    frame_bytes = bytearray(list(audio.readframes(audio.getnframes())))
-    music.encode(audio_name,'test 1 for lsb audio',frame_bytes)
+    audio_name = "sample.wav"
+    music = Audio_LSB(audio_name)
+    music.encode('test 2 for lsb audio')
+    return Response()
+
+@api_view(['GET'])
+def AudioTwoEncode(request ):
+    audio_name = "sample.wav"
+    music = Audio_LSB(audio_name)
+    music.twoEncode('test 1 for twolsb audio')
     return Response()
