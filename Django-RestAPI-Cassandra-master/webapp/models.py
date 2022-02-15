@@ -182,6 +182,28 @@ class Image_LSB():
             print("Decoded message is " + self.decode_textLeast()) 
             
 
+<<<<<<< Updated upstream
+=======
+class Audio_LSB():
+   
+   
+   
+   def __init__(self,audio_name):
+
+        print(audio_name)
+        self.audio_name = audio_name
+        self.audio = wave.open(audio_name,mode="rb")
+        self.frame_bytes = bytearray(list(self.audio.readframes(self.audio.getnframes())))
+
+   
+   def isValid(self, string, framebytes):
+      bits = bitarray.bitarray()
+      bits.frombytes(string.encode('utf-8'))
+      if len(bits) < len(self.frame_bytes):
+         return True
+      else:
+         return False
+>>>>>>> Stashed changes
    
 
        

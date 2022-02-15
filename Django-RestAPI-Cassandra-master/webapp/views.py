@@ -3,6 +3,17 @@ from rest_framework import status
 from rest_framework.decorators import api_view, parser_classes
 from rest_framework.response import Response
 from rest_framework.parsers import FormParser, MultiPartParser
+<<<<<<< Updated upstream
+=======
+from django.core.files.base import ContentFile
+import io
+import cv2
+from imageio import imread
+import numpy as np
+from .models import Image_LSB,Audio_LSB
+import wave
+import bitarray
+>>>>>>> Stashed changes
 
 from .models import Image_LSB
 
@@ -125,7 +136,72 @@ def attributes_delete(request, key):
 def ImageEncode(request):
     image = Image_LSB()
     image.encode_text('test1.jpg','lsb test','afterlsb.png')
+<<<<<<< Updated upstream
     #sadiiii
     #new
     #ghoneim comment
     return Response('file Succsesfully encoded')
+=======
+    return Response('file Succsesfully encoded')
+
+
+@api_view(['GET'])
+def ImagedecodeTwoLeast(request):
+    response = {}
+    image = Image_LSB()
+    x= image.decode_text('afterlsb.png')
+    response['data'] = x
+    return Response(response)
+
+
+@api_view(['POST'])
+def ImagedecodeLeast(request):
+    response = {}
+    base64_image = request.POST.get("name")
+    format, imgstr = base64_image.split(';base64,')
+    ext = format.split('/')[-1] 
+    base64_image = ContentFile(base64.b64decode(imgstr), name='temp.' + ext) 
+    #image_64_decode = base64.b64decode(base64_image) 
+    #image_result = open('deer_decode.png', 'wb') # create a writable image and write the decoding result
+    #image_result.write(image_64_decode)
+    image = Image_LSB()
+    #image_name = "afterlsb.png"
+    x= image.decode_textLeast(base64_image)
+    response['data'] = x
+    return Response(response)
+
+
+@api_view(['GET'])
+def AudioLeast(request):
+    response = {}
+    audio_name = 'samplelsb.wav'
+    music = Audio_LSB(audio_name)
+    x=music.decode()
+    response['data'] = x
+    return Response(response)
+
+@api_view(['GET'])
+def AudioTwoLeast(request):
+    audio_name = 'twolsb.wav'
+    response = {}
+    music = Audio_LSB(audio_name)
+    x=music.twoDecode()
+    response['data'] = x
+    return Response(response)
+
+@api_view(['GET'])
+def AudioEncode(request ):
+    audio_name = "sample.wav"
+    music = Audio_LSB(audio_name)
+    music.encode('test 2 for lsb audio')
+    return Response()
+
+@api_view(['GET'])
+def AudioTwoEncode(request ):
+    audio_name = "sample.wav"
+    music = Audio_LSB(audio_name)
+    music.twoEncode('test 1 for twolsb audio')
+    return Response()
+
+
+>>>>>>> Stashed changes

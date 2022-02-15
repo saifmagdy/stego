@@ -1,0 +1,116 @@
+<html lang="en">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="main.js" defer></script>
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+        <link rel="stylesheet" href="main.css">
+        <title>Image Steganography</title>
+    <script async src='/cdn-cgi/bm/cv/669835187/api.js'></script></head>
+
+    <body id="ghon">
+        <div class="container">
+            <div style="float:left">
+                <h1>Image Steganography</h1>
+                Hide images inside other images.
+            </div>
+
+            <div style="clear:both"></div>
+            <hr>
+
+            <p>This is a UI for Image Steganography app</p>
+            <br>
+            <p><b>Select either "encode image" or "decode image"</b></p>
+
+
+            <div class="row" style="padding-bottom: 20px">
+                <div class="col-md-12">
+                    <div class="btn-group">
+                        <button class="btn btn-danger" id="hide-switch" onclick="hide()">Hide image</button>
+                        <button class="btn btn-success" id="unhide-switch" onclick="unhide()">Unhide image</button>
+                    </div>
+                </div>
+        
+            </div>
+
+            <div id="hiderow" class="row" style="display: block;">
+
+                <div class="col-md-4" style="padding-bottom: 40px">
+                    <div style="height: 100px">
+                        Cover image:<input type="file" id="upload"><br>
+                
+                    </div>
+                    <div class="image-preview" id="imagePreview">
+                        <img src="" alt="Image Preview" class="image-preview-image">
+                        <span class="image-preview-default-text">Image Preview</span>
+                    </div>
+                    
+                    <button type="file" class="btn btn-danger" id="send" onclick="submit()">Submit</button>
+                </div>
+
+                <div class="col-md-4" style="padding-bottom: 40px">
+                    <div style="height: 100px">
+                        Secret data:<input type="file" id="upload2"><br>
+                    
+                    </div>
+                    <div class="image-preview" id="imagePreview">
+                        <img src="" alt="Image Preview" class="image-preview-image">
+                        <span class="image-preview-default-text">Image Preview</span>
+                    </div>
+                </div>
+
+                <div class="col-md-4" style="padding-bottom: 40px">
+                    <div style="height: 100px">
+                        Result Image:
+                    </div>
+                    <div class="image-preview" id="imagePreview">
+                        <img src="" alt="Image Preview" class="image-preview-image">
+                        <span class="image-preview-default-text">Image Preview</span>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div id="unhiderow" class="row" style="display: none;">
+
+                <div class="col-md-4" style="padding-bottom: 40px">
+                    <div style="height: 100px">
+                        Cover image:<input type="file" id="upload"><br>
+                
+                    </div>
+                    <div class="image-preview" id="imagePreview">
+                        <img src="" alt="Image Preview" class="image-preview-image">
+                        <span class="image-preview-default-text">Image Preview</span>
+                    </div>
+                </div>
+
+
+                <div class="col-md-4" style="padding-bottom: 40px">
+                    <div style="height: 100px">
+                        Result Image:
+                    </div>
+                    <div class="image-preview" id="imagePreview">
+                        <img src="" alt="Image Preview" class="image-preview-image">
+                        <span class="image-preview-default-text">Image Preview</span>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+            <div class="row">
+                <div class="col-md-12">
+                    <hr>
+                    <p>This is a project by: <a href=""> Mohammed Ghoneim, Saif Magdy, Mohamed kahla, Youssef Hossam.</a></p>
+                    <p>You can learn more about Steganography <a href="https://en.wikipedia.org/wiki/Steganography">on Wikipedia</a>.</p>
+                </div>
+            </div>
+
+
+        </div>
+
+    </body>
+
+</html>
