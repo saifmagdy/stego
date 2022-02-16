@@ -1,4 +1,5 @@
 import uuid
+import base64
 from rest_framework import status
 from rest_framework.decorators import api_view, parser_classes
 from rest_framework.response import Response
@@ -144,6 +145,7 @@ def ImagedecodeTwoLeast(request):
     return Response(response)
 
 @api_view(['GET'])
+<<<<<<< Updated upstream
 def ImagedecodeLeast(request):
     response = {}
     image = Image_LSB()
