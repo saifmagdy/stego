@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'webapp',
-    'corsheaders'
 
 ]
 
@@ -50,8 +49,6 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.common.CommonMiddleware'
 ]
 
 REST_FRAMEWORK = {
@@ -79,11 +76,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'boardmaster357.wsgi.application'
-
-CORS_ORIGIN_ALLOW_ALL = True   
-
-CORS_ALLOW_HEADERS = "*"
-  
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases

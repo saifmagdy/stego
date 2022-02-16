@@ -3,9 +3,6 @@
 import cv2
 import numpy as np 
 import types
-import base64
-import wave
-import bitarray
 
 class Image_LSB():
 
@@ -56,25 +53,29 @@ class Image_LSB():
         
         
         elif n_bytes_double > data_len > n_bytes:
-            for values in image:
-                for pixel in values:
-                    r, g, b = self.messageToBinary(pixel)
-                    if data_index < data_len:
+            print("will use two lsb technique as Maximum bytes to encode:", n_bytes_double,data_len)
+        for values in image:
+            for pixel in values:
+            # convert RGB values to binary format
+                r, g, b = self.messageToBinary(pixel)
+            # modify the least significant bit only if there is still data to store
+                if data_index < data_len:
                 # hide the data into least significant bit of red pixel
-                        pixel[0] = int(r[:-2] + binary_secret_msg[data_index]+ binary_secret_msg[data_index + 1], 2)
-                        data_index += 2
-                    if data_index < data_len:
+                    pixel[0] = int(r[:-2] + binary_secret_msg[data_index]+ binary_secret_msg[data_index + 1], 2)
+                    data_index += 2
+                if data_index < data_len:
                 # hide the data into least significant bit of green pixel
-                        pixel[1] = int(g[:-2] + binary_secret_msg[data_index]+ binary_secret_msg[data_index + 1], 2)
-                        data_index += 2
-                    if data_index < data_len:
+                    pixel[1] = int(g[:-2] + binary_secret_msg[data_index]+ binary_secret_msg[data_index + 1], 2)
+                    data_index += 2
+                if data_index < data_len:
                 # hide the data into least significant bit of  blue pixel
-                        pixel[2] = int(b[:-2] + binary_secret_msg[data_index]+ binary_secret_msg[data_index + 1], 2)
-                        data_index += 2
+                    pixel[2] = int(b[:-2] + binary_secret_msg[data_index]+ binary_secret_msg[data_index + 1], 2)
+                    data_index += 2
             # if data is encoded, just break out of the loop
-                    if data_index >= data_len:
-                        break
-            return image
+                if data_index >= data_len:
+                    break
+
+        return image
 
     def showData(self, image):
         binary_data = ""
@@ -118,110 +119,69 @@ class Image_LSB():
         return decoded_data[:-5]
 
     def encode_text(self,image_name,data,filename):  
-        image = cv2.imread(image_name)  
+        image = cv2.imread(image_name) # Read the input image using OpenCV-Python.
+    #It is a library of Python bindings designed to solve computer vision problems. 
+    
+    #details of the image
+        print("The shape of the image is: ",image.shape) #check the shape of image to calculate the number of bytes in it
+        print("The original image is as shown below: ")
+        resized_image = cv2.resize(image, (500, 500)) #resize the image as per your requirement
+        #cv2.imshow("images.jpg" ,resized_image)#display the image
+        #cv2.waitKey()
+    
+         
         if (len(data) == 0): 
             raise ValueError('Data is empty')
+    
         encoded_image = self.hideData(image, data) # call the hideData function to hide the secret message into the selected image
         cv2.imwrite(filename, encoded_image)
 
-    def decode_text(self,image_name):
-        image = cv2.imread(image_name)
+    def decode_text(self):
+        image_name = input("Enter the name of the steganographed image that you want to decode (with extension) :")
+    # read the image that contains the hidden image
+    
+        image = cv2.imread(image_name)#read the image using cv2.imread
+        resized_image = cv2.resize(image, (500, 500))
+        #cv2.imshow("steg.jpg" ,resized_image)#display the image
+        #cv2.waitKey()
+
+        print("The Steganographed image is as shown below: ")
+    #resize the original image as per your requirement
+
+
         text = self.showData(image)
         return text
 
-    def decode_textLeast(self,image_name):
-        image = cv2.imread(image_name)
+    def decode_textLeast(self):
+        image_name = input("Enter the name of the steganographed image that you want to decode (with extension) :")
+    # read the image that contains the hidden image
+    
+        image = cv2.imread(image_name)#read the image using cv2.imread
+        #resized_image = cv2.resize(image, (500, 500))
+        #cv2.imshow("steg.jpg" ,resized_image)#display the image
+        #cv2.waitKey()
+
+        print("The Steganographed image is as shown below: ")
+    #resize the original image as per your requirement
+
+
         text = self.showDataLeast(image)
         return text
 
+    def Steganography(self):
+        a = input("Image Steganography \n 1. Encode the data \n 2. Decode the data with least 2 significant bits \n 3. decode with least significant bit \n bit Your input is: ")
+        userinput = int(a)
+        if (userinput == 1):
+            print("\nEncoding....")
+            self.encode_text()     
+        elif (userinput == 2):
+            print("\nDecoding....") 
+            print("Decoded message is " + self.decode_text()) 
+        elif (userinput == 3):
+            print("\nDecoding....") 
+            print("Decoded message is " + self.decode_textLeast()) 
             
 
-class Audio_LSB():
-   
-   
-   
-   def __init__(self,audio_name):
-
-        print(audio_name)
-        self.audio_name = audio_name
-        self.audio = wave.open(audio_name,mode="rb")
-        self.frame_bytes = bytearray(list(self.audio.readframes(self.audio.getnframes())))
-
-   
-   def isValid(self, string, framebytes):
-      bits = bitarray.bitarray()
-      bits.frombytes(string.encode('utf-8'))
-      if len(bits) < len(frame_bytes):
-         return True
-      else:
-         return False
    
 
-   def encode(self, string):
-      string = string + '#####'
-      ba= bitarray.bitarray()
-      ba.frombytes(string.encode('utf-8'))
-      bits = ba.tolist()
-
-      for i, bit in enumerate(bits):
-         self.frame_bytes[i] = (self.frame_bytes[i] & 254) | bit
-      frame_modified = bytes(self.frame_bytes)
-    
-      newAudio =  wave.open('samplelsb.wav', 'wb')
-      newAudio.setparams(self.audio.getparams())
-      newAudio.writeframes(frame_modified)
-    
-
-      newAudio.close()
-      self.audio.close()
-      
-      
-   def twoEncode(self, string):
-      string = string + '#####'
-    
-      ba= bitarray.bitarray()
-      ba.frombytes(string.encode('utf-8'))
-      bits = ba.tolist()
-    
-    
-      j=0
-      for i in range(0,(len(bits)//2)):
-         tmp = str(int(bits[j])) + str(int(bits[j+1]))
-         self.frame_bytes[i] = (self.frame_bytes[i] & 252) | int(tmp,2)
-         j+=2
-      frame_modified = bytes(self.frame_bytes)
-    
-      newAudio =  wave.open('twolsb.wav', 'wb')
-      newAudio.setparams(self.audio.getparams())
-      newAudio.writeframes(frame_modified)
-
-      newAudio.close()
-      self.audio.close()
-      
-      
-   def decode(self):
-      audio = wave.open(self.audio_name, mode='rb')
-      self.frame_bytes = bytearray(list(audio.readframes(audio.getnframes())))
-      extracted = [self.frame_bytes[i] & 1 for i in range(len(self.frame_bytes))]
-    
-      string = bitarray.bitarray(extracted).tobytes().decode('utf-8','ignore')
-      self.audio.close()	
-      decoded = string.split("#####")[0]
-      return decoded
-   
-   
-   def twoDecode(self):
-      audio = wave.open("twolsb.wav", mode='rb')
-      frame_bytes = bytearray(list(audio.readframes(audio.getnframes())))
-      extracted = ['{:02b}'.format(frame_bytes[i] & 3) for i in range(len(frame_bytes))]
-      extracted = ''.join(extracted)
-      string = bitarray.bitarray(extracted).tobytes().decode('utf-8','ignore')
-      audio.close()
-      decoded = string.split("#####")[0]
-      return decoded
-      
-      
-
-
-       
        

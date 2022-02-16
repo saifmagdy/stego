@@ -3,15 +3,9 @@ from rest_framework import status
 from rest_framework.decorators import api_view, parser_classes
 from rest_framework.response import Response
 from rest_framework.parsers import FormParser, MultiPartParser
-import io
-import cv2
-from imageio import imread
-import numpy as np
-from .models import Image_LSB,Audio_LSB
-import wave
-import bitarray
 
-import base64
+from .models import Image_LSB
+
 
 from django.core.cache import cache
 
@@ -25,7 +19,6 @@ def overview(request):
         'Create From List': 'products/create_list/',
         'Update': 'products/update/<str:pk>/',
         'Delete': 'products/delete/<str:pk>/',
-        'decode':'image-decodeText/'
     }
     return Response(api_urls)
 
@@ -132,55 +125,7 @@ def attributes_delete(request, key):
 def ImageEncode(request):
     image = Image_LSB()
     image.encode_text('test1.jpg','lsb test','afterlsb.png')
+    #sadiiii
+    #new
+    #ghoneim comment
     return Response('file Succsesfully encoded')
-
-
-@api_view(['GET'])
-def ImagedecodeTwoLeast(request):
-    response = {}
-    image = Image_LSB()
-    x= image.decode_text('afterlsb.png')
-    response['data'] = x
-    return Response(response)
-
-@api_view(['GET'])
-def ImagedecodeLeast(request):
-    response = {}
-    image = Image_LSB()
-    image_name = "afterlsb.png"
-    x= image.decode_textLeast(image_name)
-    response['data'] = x
-    return Response(response)
-
-
-@api_view(['GET'])
-def AudioLeast(request):
-    response = {}
-    audio_name = 'samplelsb.wav'
-    music = Audio_LSB(audio_name)
-    x=music.decode()
-    response['data'] = x
-    return Response(response)
-
-@api_view(['GET'])
-def AudioTwoLeast(request):
-    audio_name = 'twolsb.wav'
-    response = {}
-    music = Audio_LSB(audio_name)
-    x=music.twoDecode()
-    response['data'] = x
-    return Response(response)
-
-@api_view(['GET'])
-def AudioEncode(request ):
-    audio_name = "sample.wav"
-    music = Audio_LSB(audio_name)
-    music.encode('test 2 for lsb audio')
-    return Response()
-
-@api_view(['GET'])
-def AudioTwoEncode(request ):
-    audio_name = "sample.wav"
-    music = Audio_LSB(audio_name)
-    music.twoEncode('test 1 for twolsb audio')
-    return Response()

@@ -20,13 +20,5 @@ urlpatterns = [
 
 
     path('image-encode/', views.ImageEncode, name="image-encode"),
-    path('image-decodeTwoLeast/', views.ImagedecodeTwoLeast, name="image-decodeTwoLeast"),
-    path('image-decodeLeast/', views.ImagedecodeLeast, name="image-decodeLeast"),
-    path('Audio-Least/', views.AudioLeast, name="Audio-Least"),
-    path('Audio-two-Least/', views.AudioTwoLeast, name="Audio-two-Least"),
-    path('Audio-Encode/', views.AudioEncode, name="Audio-Encode"),
-    path('Audio-two-Encode/', views.AudioTwoEncode, name="Audio-two-Encode"),
-    
-    
 
 ]
